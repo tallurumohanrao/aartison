@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>form</title>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+/* get data from html form*/
+
+function submitForm() {
+    var formDataObj = {};
+    var vihicleDetail = [];
+    var myForm = document.getElementById("myForm");
+    formDataObj.fname = myForm.fname.value;
+    formDataObj.lname = myForm.lname.value;
+    formDataObj.email = myForm.email.value;
+    formDataObj.mobile = myForm.mobile.value;
+    formDataObj.age = myForm.age.value;
+    formDataObj.sex = myForm.sex.value;
+    formDataObj.degree = myForm.degree.value;
+    formDataObj.aboutme = myForm.aboutme.value;
+// get vehicle data from checkbox 
+    var checkboxlength = myForm.vehicle.length  // optimize way
+    for(var i = 0; i < checkboxlength; i++){
+        if(myForm.vehicle[i].checked){
+            vihicleDetail.push(myForm.vehicle[i].value);
+        }
+    }
+    formDataObj.vehicle = vihicleDetail;
+    printMyData(formDataObj);
+};
+
+/* Reset Html Form */
+
+function resetForm() {
+    document.getElementById("myForm").reset();  // reset form
+}
+
+/* Print form data */
+
+function printMyData(formDataObj){
+    document.getElementById("getFromDetails").style.display = "none";
+    document.getElementById("printFromDetails").style.display = "block";
+    console.log(formDataObj)
+    document.getElementById("fname").innerHTML  = "First Name: "+formDataObj.fname;
+    document.getElementById("lname").innerHTML  = "Last Name: "+formDataObj.lname;
+    document.getElementById("emailId").innerHTML  = "Email - Id: "+formDataObj.email;
+    document.getElementById("mobileNo").innerHTML  = "Mobile No: "+formDataObj.mobile;
+    document.getElementById("age").innerHTML  = "Age: "+formDataObj.age;
+    document.getElementById("gander").innerHTML  = "Sex: "+formDataObj.sex;
+// vehicle arry convert to string for view perpose 
+    document.getElementById("vehicle").innerHTML  = "Vehicle: "+formDataObj.vehicle.toString();
+    document.getElementById("degree").innerHTML  = "Degree: "+formDataObj.degree;
+    document.getElementById("aboutme").innerHTML  = "About Me: "+formDataObj.aboutme;
+}
+
+/* back to html form from form details page */
+
+function backToForm(){
+    document.getElementById("printFromDetails").style.display = "none";
+    document.getElementById("getFromDetails").style.display = "block";
+    resetForm();  // call reset form function
+}
+</script>
+</head>
+<body>
+
+<div id="getFromDetails">
+    <h1 style="text-align: center; color: aqua;">Submit Form !!</h1>
+	
+	<?php 
+				if(isset($_POST['send']))
+				{
+					extract($_POST);
+					$name=$_POST['name'];
+					$email=$_POST['email'];
+					$phno=$_POST['mobile'];
+					$degree=$_POST['degree'];
+					$course=$_POST['course'];
+					$description=$_POST['description'];
+					
+					$con=mysqli_connect("localhost","root","");
+					mysqli_select_db($con,"aartison");
+					if(mysqli_query($con,"INSERT INTO course_training(name,email,phno,degree,course,description) values('$name','$email','$phno','$degree','$course','$description')"))
+					{
+						?>
+						<div class="row">
+						<div class="col-md-3"></div>
+						<div class="col-md-6">
+							<p class='alert alert-success text-center'>Sent Successfully</p>
+						</div>
+						</div>
+						<?php
+					}
+					else
+					{
+						?>
+						<div class="row">
+						<div class="col-md-3"></div>
+						<div class="col-md-6">
+							<p class='alert alert-danger text-center fls'>Unable to sent request</p>
+						</div>
+						</div>
+						<?php
+					}
+					
+				}
+				?>
+			
+	
+	
+	
+	
+	
+    <form id="myForm" action="" class="form-horizontal">
+    <fieldset>
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="fn">Name:</label>  
+      <div class="col-md-4">
+      <input type="text" name="name" id="fn" required autofocus class="form-control">
+      </div>
+      </div>
+      
+      
+
+      <div class="form-group">
+      <label class="col-md-4 control-label" for="en">Email - Id:</label>  
+      <div class="col-md-4">
+      <input type="email" name="email" required class="form-control" id="en">
+      </div>
+      </div>
+
+      <div class="form-group">
+      <label class="col-md-4 control-label" for="en"> Mobile No :</label>  
+      <div class="col-md-4">
+      <input type="tel" name="mobile" required class="form-control" id="en">
+      </div>
+      </div>
+
+    
+     
+
+        
+       
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="en">  Degree : </label>  
+		  <div class="col-md-4">
+		   <select name="degree" class="form-control">
+			  <option value="BE">M.Tech</option>
+			  <option value="BE">BE</option>
+			  <option value="B.Tech">B.Tech</option>
+			  <option value="HSC">HSC</option>
+			  <option value="SSC">SSC</option>
+			</select>
+		  </div>
+		</div>
+		<div class="form-group">
+		  <label class="col-md-4 control-label" for="en"> Courses : </label>  
+		  <div class="col-md-4">
+		   <select name="degree" class="form-control">
+			  <option value="BE">Devops</option>
+			  <option value="BE">WEB Designing</option>
+			  <option value="B.Tech">WEB Developer</option>
+			  <option value="HSC">PHP $ Mysql</option>
+			  <option value="SSC">Codeigniter</option>
+			</select>
+		  </div>
+		</div>
+
+      <div class="form-group">
+      <label class="col-md-4 control-label" for="en">  Description:  </label>  
+      <div class="col-md-4">
+       <textarea name="description" rows="2" cols="50" class="form-control">
+        </textarea>
+      </div>
+      </div>
+      <div class="form-group">
+      <label class="col-md-4 control-label" for="en"></label>
+       <div class="col-md-4"> 
+      <input type="button" onclick="resetForm()" value="Reset" class="btn btn-danger pull-right" >
+      <input type="button" onclick="submitForm()" value="Submit form" class="btn btn-info pull-right">
+      </div>
+      </div>
+    </form>
+</div>
+<div id="printFromDetails" style="display:none">
+    <p id="fname">scsc</p>
+    <p id="lname"></p>
+    <p id="emailId"></p>
+    <p id="mobileNo"></p>
+    <p id="age"></p>
+    <p id="gander"></p>
+    <p id="vehicle"></p>
+    <p id="degree"></p>
+    <p id="aboutme"></p>
+    <input type="button" onclick="backToForm()" value="Back To Form">
+</div>
+</fieldset>
+</body>
+</html>
